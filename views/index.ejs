@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<meta charset="utf-8"/>
+
+<html>
+    <head>
+        <title>Ma todolist</title>
+        <!-- Nous avons intégré un fichier css plutôt que d'utiliser le style directement dans l'ejs comme c'était le cas dans le fichier original -->
+        <link rel="stylesheet" href="/views/style.css">
+
+    </head>
+
+    <body>
+        <h1 class = "ui main blue">Ma todolist</h1>
+
+        <ul>
+        <% todolist.forEach(function(tache, index) { %>
+            <li data-id='<%= tache.id %>'>
+                <!-- Nous avons modifier cette ligne de sorte que EJS puis coché ou nom une tâche en fonction de son état dans la base de données automatiquement, et ajouté la fonction qui permet de changer l'état d'une tâche dans la base de données -->
+				<input type='checkbox' onclick = "modifyState(this)" <%if (tache.status == "FAIT"){ %> checked <% } %>/>
+                    <!-- Nous avons passé le libellé de la tâche directement dans un bloc qui lui est dédié -->
+                    <p style="display:inline-block" id = <%= tache.id %>><%= tache.libelle %></p>
+                <!-- Nous avons ajouté la fonction qui permet de supprimer une tâche dans la base de données -->
+				<span class='supprimer' onclick = "deleteTask(this)" id = <%= tache.id %>>✕</span>
+			</li>
+        <% }); %>
+        </ul>
+
+        <div id = "divValidation" align="center">
+            <form onsubmit='return false;', method="post", action="/taches">
+                <p>
+                    <label for="newtodo">Nouvelle tâche : </label>
+                    <input type="text" name="libelle" id="newtodo" autofocus />
+                    <!-- Nous avons ajouté la fonction qui permet d'ajouter une tâche dans la base de données -->
+                    <input type="submit" value="Ajouter" id = "buttonValidation" onclick="addTask();" />
+                </p>
+            </form>
+        </div>
+    <!-- Nous indiquons à la page où est notre fichier de script -->
+    <script type="text/javascript" src="fetch.js"></script>
+    </body>
+</html>
